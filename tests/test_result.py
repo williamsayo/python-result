@@ -1,5 +1,5 @@
 import unittest
-from src.result.utils.helpers import (
+from result import (
     result_ok,
     result_fail,
     result_equality,
@@ -7,8 +7,8 @@ from src.result.utils.helpers import (
     value_or,
     unwrap_or,
 )
-from src.result.guards.base import is_result, is_ok, is_fail
-from src.result.base import Ok, Fail
+from result import is_result, is_ok, is_fail
+from result.base import Ok, Fail
 
 
 class TestResult(unittest.TestCase):
@@ -34,6 +34,7 @@ class TestResult(unittest.TestCase):
     def test_result_fail_none(self) -> None:
         """Ensure result_fail raises TypeError when called without a required value."""
         self.assertRaises(TypeError, result_fail)
+        self.assertRaises(ValueError, result_fail, None)
 
     def test_result_combine(self) -> None:
         """
