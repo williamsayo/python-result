@@ -1,6 +1,6 @@
 from inspect import isclass
 from result.base import Ok as OkClass, Fail as FailClass, Result as ResultClass
-from result.types.base import Either, Ok, Fail, ResultCombine, Result
+from result.types.base import Either, Ok, Fail, ResultCombine
 from result.guards import is_fail
 from typing import List, Sequence, Callable, Any
 from functools import wraps, partial
