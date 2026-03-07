@@ -16,7 +16,7 @@ dev = [
 "Documentation" = "https://github.com/williamsayo/python-boilerplate-core#readme"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src/result"]
 
 [tool.ty.rules]
 'invalid-argument-type' = 'ignore'
