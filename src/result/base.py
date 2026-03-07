@@ -2,6 +2,7 @@ from typing import Literal, Iterator
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
+
 class _Result[T](ABC):
     """
     Abstract base class representing a Result type.
@@ -12,9 +13,6 @@ class _Result[T](ABC):
 
     This base class defines the required interface for Result variants.
     """
-
-    value: T
-    __match_args__ = ("value",)
 
     @abstractmethod
     def isFail(self) -> bool:
@@ -52,6 +50,7 @@ class _Result[T](ABC):
             bool: True if equal, False otherwise.
         """
         ...
+
     @abstractmethod
     def __ne__(self, other: object) -> bool:
         """
@@ -79,7 +78,7 @@ class _Result[T](ABC):
         ...
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _Ok[S](_Result[S]):
     """
     Represents a successful Result.
@@ -90,8 +89,8 @@ class _Ok[S](_Result[S]):
     - value fallback via value_or
     """
 
-    __match_args__ = ("value",)
     value: S
+    __match_args__ = ("value",)
 
     def __iter__(self) -> Iterator[S]:
         """
@@ -128,7 +127,7 @@ class _Ok[S](_Result[S]):
         Returns:
             bool: True if both are Ok and values differ, otherwise NotImplemented.
         """
-        if isinstance(other,Ok):
+        if isinstance(other, Ok):
             return not (self.value == other.value)
         return NotImplemented
 
@@ -188,7 +187,7 @@ class _Ok[S](_Result[S]):
         return result
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _Fail[F](_Result[F]):
     """
     Represents a failed Result.
@@ -197,8 +196,9 @@ class _Fail[F](_Result[F]):
     - type guards via isFail / isOk
     - iterable unpacking support
     """
-    __match_args__ = ("value",)
+
     value: F
+    __match_args__ = ("value",)
 
     def __iter__(self) -> Iterator[F]:
         """
