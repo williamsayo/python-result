@@ -1,8 +1,6 @@
-from typing import Literal, Iterator,Self
+from typing import Literal, Iterator
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from result.nothing import NothingType as Nothing
-
 
 class _Result[T](ABC):
     """
