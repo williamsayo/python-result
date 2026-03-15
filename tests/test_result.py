@@ -47,7 +47,7 @@ class TestResult(unittest.TestCase):
 
         combined_result = result_combine([result1, result2])
         self.assertIsInstance(combined_result, Ok)
-        self.assertEqual(combined_result.value, [1, 2])
+        self.assertEqual(combined_result.value, (1, 2))
 
         combined_result_with_fail = result_combine([result1, result3])
         self.assertIsInstance(combined_result_with_fail, Fail)
