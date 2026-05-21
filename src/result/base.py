@@ -1,4 +1,4 @@
-from typing import Literal, Iterator, Generic, TypeVar
+from typing import Literal, Iterator, Generic, NoReturn, TypeVar
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
@@ -302,7 +302,7 @@ class Fail(_Result[F], Generic[F]):
         """
         return result
 
-    def unwrap_or_raise(self) -> F:
+    def unwrap_or_raise(self) -> NoReturn:
         """Return the contained error value since this is a Fail.
         Raises:
             Exception: The contained error value if it is an Exception.
@@ -312,8 +312,9 @@ class Fail(_Result[F], Generic[F]):
         """
         if isinstance(self.value, Exception):
             raise self.value
-        raise TypeError(
-            f"Cannot unwrap Fail with non-Exception value: {self.value}"
-        )
+
+        raise Exception(self.value)
+        # raise TypeError(f"Cannot unwrap Fail with non-Exception value: {self.value}")
+
 
 Result = _Result
