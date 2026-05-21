@@ -29,7 +29,7 @@ def is_ok[S, F](result: Either[S, F]) -> TypeIs[Ok[S]]:
     Returns:
         TypeIs[Ok[S]]: True if `result` is an Ok result, otherwise False.
     """
-    return result.isOk()
+    return result.is_ok()
 
 
 def is_fail[S, F](result: Either[S, F]) -> TypeIs[Fail[F]]:
@@ -44,4 +44,4 @@ def is_fail[S, F](result: Either[S, F]) -> TypeIs[Fail[F]]:
     Returns:
         TypeIs[Fail[F]]: True if `result` is a Fail result, otherwise False.
     """
-    return result.isFail()
+    return result.is_fail()

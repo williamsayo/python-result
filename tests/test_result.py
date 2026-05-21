@@ -45,11 +45,11 @@ class TestResult(unittest.TestCase):
         result2 = result_ok(2)
         result3 = result_fail("error")
 
-        combined_result = result_combine([result1, result2])
+        combined_result = result_combine((result1, result2))
         self.assertIsInstance(combined_result, Ok)
         self.assertEqual(combined_result.value, (1, 2))
 
-        combined_result_with_fail = result_combine([result1, result3])
+        combined_result_with_fail = result_combine((result1, result3))
         self.assertIsInstance(combined_result_with_fail, Fail)
         self.assertEqual(combined_result_with_fail.value, "error")
 
@@ -115,9 +115,9 @@ class TestResult(unittest.TestCase):
         """
         result = result_ok(2)
         self.assertTrue(is_ok(result))
-        self.assertTrue(result.isOk())
+        self.assertTrue(result.is_ok())
         self.assertFalse(is_fail(result))
-        self.assertFalse(result.isFail())
+        self.assertFalse(result.is_fail())
 
     def test_is_fail_guard(self) -> None:
         """
@@ -126,9 +126,9 @@ class TestResult(unittest.TestCase):
         """
         result = result_fail("error")
         self.assertTrue(is_fail(result))
-        self.assertTrue(result.isFail())
+        self.assertTrue(result.is_fail())
         self.assertFalse(is_ok(result))
-        self.assertFalse(result.isOk())
+        self.assertFalse(result.is_ok())
 
 
 class TestResultPatternMatching(unittest.TestCase):
