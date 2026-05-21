@@ -21,7 +21,7 @@ class _Result(ABC, Generic[T]):
     value: T
 
     @abstractmethod
-    def isFail(self) -> bool:
+    def is_fail(self) -> bool:
         """
         Return True if this Result is a Fail.
 
@@ -31,7 +31,7 @@ class _Result(ABC, Generic[T]):
         ...
 
     @abstractmethod
-    def isOk(self) -> bool:
+    def is_ok(self) -> bool:
         """
         Return True if this Result is an Ok.
 
@@ -90,7 +90,7 @@ class Ok(_Result[S], Generic[S]):
     Represents a successful Result.
 
     This variant stores a success value and provides helper behavior such as:
-    - type guards via isOk / isFail
+    - type guards via is_ok / is_fail
     - iterable unpacking support
     - value fallback via value_or
     """
@@ -158,7 +158,7 @@ class Ok(_Result[S], Generic[S]):
         """
         return f"<Ok ({(self.value)})>"
 
-    def isFail(self) -> Literal[False]:
+    def is_fail(self) -> Literal[False]:
         """
         Type guard indicating this Result is not a Fail.
 
@@ -167,7 +167,7 @@ class Ok(_Result[S], Generic[S]):
         """
         return False
 
-    def isOk(self) -> Literal[True]:
+    def is_ok(self) -> Literal[True]:
         """
         Type guard indicating this Result is an Ok.
 
@@ -192,6 +192,15 @@ class Ok(_Result[S], Generic[S]):
             return self.value
         return result
 
+    def unwrap_or_raise(self) -> S:
+        """
+        Return the contained value since this is an Ok.
+
+        Returns:
+            S: The contained success value.
+        """
+        return self.value
+
 
 @dataclass(frozen=True, slots=True)
 class Fail(_Result[F], Generic[F]):
@@ -199,7 +208,7 @@ class Fail(_Result[F], Generic[F]):
     Represents a failed Result.
 
     This variant stores an error value and provides helper behavior such as:
-    - type guards via isFail / isOk
+    - type guards via is_fail / is_ok
     - iterable unpacking support
     """
 
@@ -266,7 +275,7 @@ class Fail(_Result[F], Generic[F]):
         """
         return f"<Fail ({(self.value)})>"
 
-    def isFail(self) -> Literal[True]:
+    def is_fail(self) -> Literal[True]:
         """
         Type guard indicating this Result is a Fail.
 
@@ -275,7 +284,7 @@ class Fail(_Result[F], Generic[F]):
         """
         return True
 
-    def isOk(self) -> Literal[False]:
+    def is_ok(self) -> Literal[False]:
         """
         Type guard indicating this Result is not an Ok.
 
@@ -284,5 +293,27 @@ class Fail(_Result[F], Generic[F]):
         """
         return False
 
+    def value_or[T](self, result: T) -> T:
+        """Return the fallback value since this is a Fail.
+        Args:
+            result (T): The fallback value to return.
+        Returns:
+            T: The fallback value.
+        """
+        return result
+
+    def unwrap_or_raise(self) -> F:
+        """Return the contained error value since this is a Fail.
+        Raises:
+            Exception: The contained error value if it is an Exception.
+            TypeError: If the contained error value is not an Exception.
+        Returns:
+            F: The contained error value.
+        """
+        if isinstance(self.value, Exception):
+            raise self.value
+        raise TypeError(
+            f"Cannot unwrap Fail with non-Exception value: {self.value}"
+        )
 
 Result = _Result
